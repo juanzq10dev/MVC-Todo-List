@@ -1,31 +1,44 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MVC_todo_list.Models;
+using MVC.Models;
+using MVC.Services;
 
-namespace MVC_todo_list.Controllers;
+namespace MVC.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly TaskService _taskService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(TaskService taskService)
     {
-        _logger = logger;
+        _taskService = taskService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
+    {
+        var tasks = await _taskService.GetAsync();
+
+        return View(tasks);
+    }
+
+    public IActionResult CreatePage()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    [HttpPost]
+    public async Task<IActionResult> CreateTask(TodoTaskModel task)
     {
-        return View();
-    }
+        if (ModelState.IsValid)
+        {
+            await _taskService.CreateAsync(task);
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            Console.WriteLine("Invalid Task");
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View("Index", await _taskService.GetAsync());
     }
 }

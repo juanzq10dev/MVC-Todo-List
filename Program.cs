@@ -1,7 +1,13 @@
+using MVC.Models;
+using MVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<TasksDatabaseSettings>(builder.Configuration.GetSection("TaskDatabase"));
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<TaskService>();
 
 var app = builder.Build();
 
