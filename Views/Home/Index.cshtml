@@ -22,10 +22,17 @@
             @foreach (var task in Model)
             {
                 <tr>
-                    <td>@task.Name</td>
+                    <td><blockquote id="blockquote @task.Id" contenteditable="true" onkeyup="enableSaveButton('@task.Id', this)">@task.Name</blockquote></td>
                     <td>@(task.Completed ? "Yes" : "No")</td>
+                    <td><button id="@task.Id" class="btn btn-primary save-button" disabled
+                            onclick="updateTaskName('@task.Id')">Save</button></td>
+                    <td><button class="btn btn-danger" onclick="deleteTask('@task.Id')">Delete</button></td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section scripts {
+    <script src="~/js/site.js"></script>
+}
