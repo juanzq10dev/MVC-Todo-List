@@ -1,0 +1,22 @@
+@model TodoTaskModel
+
+@{
+    ViewData["Title"] = "Add new task";
+}
+
+
+<div class="container mt-4">
+    <h2>Create Task</h2>
+    <form asp-controller="Home" asp-action="CreateTask" method="post" onsubmit="validateTask()">
+        <div class="form-group">
+            <label asp-for="Name">Task Name</label>
+            <input id="nameInput" asp-for="Name">
+            <span asp-validation-for="Name"></span>
+            <button type="submit">Add Card</button>
+        </div>
+    </form>
+</div>
+
+@section scripts {
+    <script src="~/js/site.js"></script>
+}

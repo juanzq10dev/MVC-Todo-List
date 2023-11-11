@@ -29,16 +29,25 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateTask(TodoTaskModel task)
     {
-        if (ModelState.IsValid)
-        {
-            await _taskService.CreateAsync(task);
-            return RedirectToAction("Index");
-        }
-        else
-        {
-            Console.WriteLine("Invalid Task");
+        await _taskService.CreateAsync(task);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateTask(string id, [FromBody] TodoTaskModel editetTask) {
+        var toUpdateTask = await _taskService.GetAsync(id); 
+        if (toUpdateTask == null) {
+            return NotFound(); 
         }
 
-        return View("Index", await _taskService.GetAsync());
+        toUpdateTask.Name = editetTask.Name; 
+        await _taskService.UpdateAsync(id, toUpdateTask);
+        return Ok();
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteTask(string id) {
+        await _taskService.RemoveAsync(id);
+        return Ok();
     }
 }
