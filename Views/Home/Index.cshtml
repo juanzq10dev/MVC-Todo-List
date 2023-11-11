@@ -23,7 +23,9 @@
             {
                 <tr>
                     <td><blockquote id="blockquote @task.Id" contenteditable="true" onkeyup="enableSaveButton('@task.Id', this)">@task.Name</blockquote></td>
-                    <td>@(task.Completed ? "Yes" : "No")</td>
+                    <td><input type="checkbox"
+                            onchange="updateCompletedValue('@task.Id', this.checked)" @(task.Completed ? "checked" : "")>
+                    </td>
                     <td><button id="@task.Id" class="btn btn-primary save-button" disabled
                             onclick="updateTaskName('@task.Id')">Save</button></td>
                     <td><button class="btn btn-danger" onclick="deleteTask('@task.Id')">Delete</button></td>

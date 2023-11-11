@@ -40,7 +40,26 @@ public class HomeController : Controller
             return NotFound(); 
         }
 
-        toUpdateTask.Name = editetTask.Name; 
+        if (editetTask.Name != null && editetTask.Name.Trim().Length != 0) {
+            toUpdateTask.Name = editetTask.Name;    
+        }
+
+        await _taskService.UpdateAsync(id, toUpdateTask);
+        return Ok();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateTaskStatus(string id, [FromBody] TodoTaskModel editedTask) {
+        var toUpdateTask = await _taskService.GetAsync(id);
+        if (toUpdateTask == null)
+        {
+            return NotFound();
+        }
+
+  
+        toUpdateTask.Completed = editedTask.Completed;
+      
+
         await _taskService.UpdateAsync(id, toUpdateTask);
         return Ok();
     }

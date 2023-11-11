@@ -45,6 +45,23 @@ function updateTaskName(taskId) {
     });
 }
 
+function updateCompletedValue(taskId, checked) {
+    fetch(`/Home/UpdateTaskStatus/${taskId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ Completed: checked })
+    })
+        .then(response => {
+            if (response.ok) {
+            } else {
+                alert("Could not update the task")
+            }
+        });
+}
+
+
 function showEditButton(blockquote) {
     var taskId = blockquote.getAttribute('data-task-id');
     var editButton = document.querySelector(`[data-task-id="${taskId}"] + .edit-button`);
